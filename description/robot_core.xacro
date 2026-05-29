@@ -3,150 +3,209 @@
 
     <xacro:include filename="inertial_macros.xacro"/>
 
+
     <material name="white">
         <color rgba="1 1 1 1" />
     </material>
-
-    <material name="orange">
-        <color rgba="1 0.3 0.1 1" />
-    </material>
-
-    <material name="blue">
-        <color rgba="0.2 0.2 1 1" />
-    </material>
-
     <material name="black">
-        <color rgba="0 0 0 1" />
+        <color rgba="0.1 0.1 0.1 1" />
+    </material>
+    <material name="transparent_white">
+        <color rgba="0.79216 0.81961 0.93333 0.6" />
     </material>
 
-     <material name="red">
-        <color rgba="0 0 0 1" />
-    </material>
-    
+    <!-- ========================================== -->
+    <!-- GỐC ROBOT (BASE FOOTPRINT) -->
+    <!-- ========================================== -->
+    <link name="base_footprint"></link>
+
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_footprint"/>
+        <child link="base_link"/>
+
+        <origin xyz="0.1451 0 0.089" rpy="0 0 0"/>
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- KHUNG XE CHÍNH (BASE LINK - NẶNG 6KG) -->
+    <!-- ========================================== -->
     <link name="base_link">
-    </link>
-
-    <!--CHASSIS LINK-->
-
-    <joint name="chassis_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="chassis"/>
-        <origin xyz="-0.1 0 0"/>
-    </joint> 
-
-    <link name="chassis">
+        <inertial>
+            
+            <origin xyz="-0.0055205 -4.5468E-17 0.02" rpy="0 0 0" />
+            <mass value="10" />
+            <inertia ixx="0.08" ixy="0" ixz="0" iyy="0.12" iyz="0" izz="0.16" />
+        </inertial>
         <visual>
-            <origin xyz="0.15 0 0.075"/>
+            <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <box size="0.3 0.3 0.15"/>
+                <mesh filename="package://amr_003/meshes/base_link.STL" />
             </geometry>
-            <material name="white"/>
+            <material name="transparent_white"/>
         </visual>
         <collision>
-            <origin xyz="0.15 0 0.075"/>
+            <!-- Dùng hộp đơn giản cho va chạm Chassis để Gazebo tính toán mượt nhẹ -->
+            <origin xyz="0 0 0.1" rpy="0 0 0" />
             <geometry>
-                <box size="0.3 0.3 0.15"/>
+                <box size="0.45 0.35 0.2"/>
             </geometry>
         </collision>
-        <xacro:inertial_box mass="0.5" x="0.3" y="0.3" z="0.15">
-            <origin xyz="0.15 0 0.075" rpy="0 0 0"/>
-        </xacro:inertial_box>
     </link>
 
-    <gazebo reference="chassis">
-        <material>Gazebo/White</material>
-    </gazebo>
-
-    <!-- LEFTY WHEEL LINK -->
-    
-    <joint name="left_wheel_joint" type="continuous">
-        <parent link="base_link"/>
-        <child link="left_wheel"/>
-        <origin xyz="0 0.175 0" rpy="-${pi/2} 0 0"/>
-        <axis xyz="0 0 1"/>
-    </joint>
-
+    <!-- ========================================== -->
+    <!-- BÁNH XE DẪN ĐỘNG TRÁI -->
+    <!-- ========================================== -->
     <link name="left_wheel">
+        <inertial>
+            <origin xyz="2.7756E-17 3.4694E-18 -0.01" rpy="0 0 0" />
+            <mass value="0.1415" />
+            <inertia ixx="7.859E-05" ixy="0" ixz="0" iyy="7.859E-05" iyz="0" izz="0.00014084" />
+        </inertial>
         <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <cylinder radius="0.05" length="0.04"/>
-            </geometry>
-            <material name="blue"/>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="0.05" length="0.04"/>
-            </geometry>
-        </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_cylinder>
-    </link>
-
-    <gazebo reference="left_wheel">
-        <material>Gazebo/Blue</material>
-    </gazebo>
-
-    <!-- RIGHT WHEEL LINK -->
-    
-    <joint name="right_wheel_joint" type="continuous">
-        <parent link="base_link"/> 
-        <child link="right_wheel"/>
-        <origin xyz="0 -0.175 0" rpy="${pi/2} 0 0"/>
-        <axis xyz="0 0 -1"/>
-    </joint>
-
-    <link name="right_wheel">
-        <visual>
-            <geometry>
-                <cylinder radius="0.05" length="0.04"/>
-            </geometry>
-            <material name="blue"/>
-        </visual>
-        <collision>
-            <geometry>
-                <cylinder radius="0.05" length="0.04"/>
-            </geometry>
-        </collision>
-        <xacro:inertial_cylinder mass="0.1" length="0.04" radius="0.05">
-            <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_cylinder>
-    </link>
-
-    <gazebo reference="right_wheel">
-        <material>Gazebo/Blue</material>
-    </gazebo>
-
-
-    <!--CASTER WHEEL LINK-->
-    <joint name="caster_wheel_joint" type="fixed">
-        <parent link="chassis"/>
-        <child link="caster_wheel"/>
-        <origin xyz="0.24 0 0"/>
-    </joint>
-
-    <link name="caster_wheel">
-        <visual>
-            <geometry>
-                <sphere radius="0.05"/>
+                <mesh filename="package://amr_003/meshes/left_wheel.STL" />
             </geometry>
             <material name="black"/>
         </visual>
         <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
             <geometry>
-                <sphere radius="0.05"/>
+                <sphere radius="0.0445" /> 
+                <!-- length="0.04" -->
             </geometry>
         </collision>
-        <xacro:inertial_sphere mass="0.1" radius="0.05">
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-        </xacro:inertial_sphere>
     </link>
 
-    <gazebo reference="caster_wheel">
-        <material>Gazebo/Black</material>
-        <mu1 value="0.001"/>
-        <mu2 value="0.001"/>
+    <joint name="left_wheel_joint" type="continuous">
+        <origin xyz="-0.1451 0.2825 -0.0445" rpy="-1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="left_wheel" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0.1" friction="0.1" />
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- BÁNH XE DẪN ĐỘNG PHẢI -->
+    <!-- ========================================== -->
+    <link name="right_wheel">
+        <inertial>
+            <origin xyz="-4.1633E-17 -3.4694E-18 0.01" rpy="0 0 0" />
+            <mass value="0.1415" />
+            <inertia ixx="7.859E-05" ixy="0" ixz="0" iyy="7.859E-05" iyz="0" izz="0.00014084" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://amr_003/meshes/right_wheel.STL" />
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.0445" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="right_wheel_joint" type="continuous">
+        <origin xyz="-0.1451 -0.2825 -0.0445" rpy="-1.5708 0 0" />
+        <parent link="base_link" />
+        <child link="right_wheel" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0.1" friction="0.1" />
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- CỔ XOAY CASTER BRACKET (PHUỘC TRƯỚC) -->
+    <!-- ========================================== -->
+    <link name="caster_wheel_1">
+        <inertial>
+            <origin xyz="1.6653E-16 1.2291E-17 -0.013121" rpy="0 0 0" />
+            <mass value="0.5" />
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://amr_003/meshes/caster_wheel_1.STL" />
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 -0.015" rpy="0 0 0" />
+            <geometry>
+                <box size="0.03 0.03 0.02"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="caster_bracket_joint" type="fixed">
+        <origin xyz="0.23009 0 -0.015" rpy="0 0 0" />
+        <parent link="base_link" />
+        <child link="caster_wheel_1" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0.1" friction="0.1" /> <!-- Đã giảm damping để mượt hơn -->
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- BÁNH XE CASTER TRƯỚC (QUAY TỰ DO) -->
+    <!-- ========================================== -->
+    <link name="caster_wheel_2">
+        <inertial>
+            <origin xyz="-5.5511E-17 -5.5511E-17 -6.7405E-19" rpy="0 0 0" />
+            <mass value="0.5" />
+            <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://amr_003/meshes/caster_wheel_2.STL" />
+            </geometry>
+            <material name="black"/>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <sphere radius="0.026" />
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="caster_wheel_joint" type="fixed">
+        <origin xyz="0 0 -0.048" rpy="-1.5708 0 0" />
+        <parent link="caster_wheel_1" />
+        <child link="caster_wheel_2" />
+        <axis xyz="0 0 1" />
+        <dynamics damping="0.1" friction="0.1" />
+    </joint>
+
+    <!-- ========================================== -->
+    <!-- CẤU HÌNH VẬT LÝ GAZEBO ĐẶC THÙ -->
+    <!-- ========================================== -->
+    <gazebo reference="base_link">
+        <material>Gazebo/Orange</material>
     </gazebo>
-
-
-    </robot>
+    <gazebo reference="left_wheel">
+        <mu1>2.0</mu1>
+        <mu2>2.0</mu2>
+        <material>Gazebo/FlatBlack</material>
+    </gazebo>
+    <gazebo reference="right_wheel">
+        <mu1>2.0</mu1>
+        <mu2>2.0</mu2>
+        <material>Gazebo/FlatBlack</material>
+    </gazebo>
+    <gazebo reference="caster_wheel_1">
+        <material>Gazebo/Grey</material>
+    </gazebo>
+    <gazebo reference="caster_wheel_2">
+        <mu1>0.0</mu1> 
+        <mu2>0.0</mu2>
+        <kp>10000000.0</kp> 
+        <kd>1.0</kd> 
+        <minDepth>0.001</minDepth> 
+        <material>Gazebo/Black</material>
+    </gazebo>
+</robot>
