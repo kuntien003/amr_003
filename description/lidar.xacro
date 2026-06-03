@@ -1,32 +1,37 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
     <joint name="laser_joint" type="fixed">
-        <origin xyz="0.072995 0 0.45" rpy="0 0 0" />
-        <parent link="base_link" />
-        <child link="laser_frame" />
+        <!-- Vị trí lấy từ URDF SolidWorks mới (lidar_joint) -->
+        <!-- x=0.057994, y≈0, z=0.5808 so với base_link -->
+        <origin xyz="-0.00063688 0.00045389 0.58047" rpy="0 0 0"/>
+        <parent link="base_link"/>
+        <child link="laser_frame"/>
     </joint>
 
     <link name="laser_frame">
         <inertial>
-            <origin xyz="1.6653E-16 -1.4832E-18 -0.031831" rpy="0 0 0" />
-            <mass value="0.4" />
-            <inertia ixx="0.00085342" ixy="-7.7037E-34" ixz="-2.3908E-18"
-                     iyy="0.00085342" iyz="1.6803E-20" izz="0.0015382" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <mass value="0.2"/>
+            <inertia
+                ixx="0.001" ixy="0" ixz="0"
+                iyy="0.001" iyz="0"
+                izz="0.001"/>
         </inertial>
         <visual>
-            <!-- Sử dụng hình trụ thay thế cho file .STL để hiển thị tạm thời -->
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <cylinder radius="0.05" length="0.04"/>
+                <!-- Dùng mesh STL từ SolidWorks export -->
+                <mesh filename="package://amr_003/meshes/lidar_link.STL"/>
             </geometry>
-            <material name="laser_color">
-                <color rgba="0.79216 0.81961 0.93333 1" />
+            <material name="">
+                <color rgba="0.2 0.2 0.2 1"/>
             </material>
         </visual>
         <collision>
-            <origin xyz="0 0 0" rpy="0 0 0" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
+                <!-- Dùng cylinder đơn giản cho collision (nhanh hơn mesh) -->
                 <cylinder radius="0.05" length="0.04"/>
             </geometry>
         </collision>
@@ -34,22 +39,21 @@
 
     <gazebo reference="laser_frame">
         <material>Gazebo/Black</material>
-
         <sensor name="laser" type="ray">
-            <pose> 0 0 0 0 0 0 </pose>
+            <pose>0 0 0 0 0 0</pose>
             <visualize>false</visualize>
-            <update_rate>10</update_rate>
+            <update_rate>10.0</update_rate>
             <ray>
                 <scan>
                     <horizontal>
                         <samples>360</samples>
-                        <min_angle>-3.14</min_angle>
-                        <max_angle>3.14</max_angle>
+                        <min_angle>-3.14159</min_angle>
+                        <max_angle>3.14159</max_angle>
                     </horizontal>
                 </scan>
                 <range>
                     <min>0.3</min>
-                    <max>12</max>
+                    <max>12.0</max>
                 </range>
             </ray>
             <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">

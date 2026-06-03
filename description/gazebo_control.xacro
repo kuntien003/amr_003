@@ -8,8 +8,8 @@
             <right_joint>right_wheel_joint</right_joint>
             
             <!-- Kích thước cơ khí từ file CAD của Tiến -->
-            <wheel_separation>0.565</wheel_separation> <!-- Khoảng cách 2 bánh chính (56.5cm) -->
-            <wheel_diameter>0.089</wheel_diameter>     <!-- Đường kính bánh xe (8.9cm) -->
+            <wheel_separation>0.572</wheel_separation>
+            <wheel_diameter>0.074</wheel_diameter>    <!-- Đường kính bánh xe (8.9cm) -->
             
             <!-- Giới hạn lực động cơ -->
             <max_wheel_torque>20</max_wheel_torque>
@@ -20,7 +20,7 @@
             <robot_base_frame>base_footprint</robot_base_frame>
             <publish_odom>true</publish_odom>
             <publish_odom_tf>true</publish_odom_tf>
-            <publish_wheel_tf>true</publish_wheel_tf>
+            <publish_wheel_tf>false</publish_wheel_tf>
         </plugin>
     </gazebo>
 
